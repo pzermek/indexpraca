@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gra - Zgadnij Liczbę</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('swieta.jpg');
+            background-size: cover;
+            background-position: center;
+            animation: snow 30s infinite linear;  /* Spowolnione przewijanie tła */
+            cursor: url('https://upload.wikimedia.org/wikipedia/commons/4/4e/Christmas_tree_emoji.png'), auto;
+        }
+
+        @keyframes snow {
+            0% { background-position: 0 0; }
+            100% { background-position: 100% 100%; }
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 500px;
+            padding: 20px;
+            text-align: center;
+            border: 5px solid #ff4d00;
+        }
+
+        h1 {
+            color: #ff4d00; /* Świąteczny czerwony */
+            font-size: 3em;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #228b22; /* Świąteczna zieleń */
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        button {
+            background-color: #ff4d00;
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden; /* Ważne, aby krawędzie przycisku były widoczne */
+        }
+
+        /* Dodanie efektu zamrażania na krawędziach */
+        button:hover {
+            background-color: #ff6347;
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Animacja zamrażania na krawędziach */
+        button:hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid rgba(255, 255, 255, 0.8); /* Biała zamrożona krawędź */
+            border-radius: 8px;
+            animation: frostEdge 0.5s infinite;
+        }
+
+        @keyframes frostEdge {
+            0% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+        }
+
+        input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .result {
+            font-weight: bold;
+            margin: 10px 0;
+            font-size: 1.2em;
+            color: #ff4500; /* Ciepła czerwień */
+        }
+
+        .feedback {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 15px;
+            color: #ff1493; /* Kolor na feedback */
+        }
+
+        .back-button {
+            margin-top: 20px;
+            background-color: #228b22; /* Zieleń świąteczna */
+            border-radius: 10px;
+            padding: 10px 15px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #006400;
+            transform: scale(1.1); /* Powiększenie przy najechaniu */
+        }
+
+        .result span {
+            font-size: 1.3em;
+            font-weight: bolder;
+            color: #32cd32; /* Świąteczna zieleń */
+        }
+
+        /* Więcej śniegu */
+        .snowflakes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+            animation: snowfall 10s infinite linear;
+        }
+
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            background-color: white;
+            border-radius: 50%;
+            width: 8px;
+            height: 8px;
+            opacity: 0.8;
+            animation: snow-falling 5s infinite linear;
+        }
+
+        @keyframes snowfall {
+            100% { top: 100%; }
+        }
+
+        @keyframes snow-falling {
+            0% {
+                left: 100%;
+                transform: scale(0);
+            }
+            50% {
+                left: 50%;
+                transform: scale(1);
+            }
+            100% {
+                left: 0;
+                transform: scale(0);
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="snowflakes">
+        <div class="snowflake" style="left: 10%; animation-duration: 6s;"></div>
+        <div class="snowflake" style="left: 25%; animation-duration: 8s;"></div>
+        <div class="snowflake" style="left: 40%; animation-duration: 5s;"></div>
+        <div class="snowflake" style="left: 60%; animation-duration: 7s;"></div>
+        <div class="snowflake" style="left: 80%; animation-duration: 10s;"></div>
+        <div class="snowflake" style="left: 15%; animation-duration: 9s;"></div>
+        <div class="snowflake" style="left: 50%; animation-duration: 11s;"></div>
+        <div class="snowflake" style="left: 70%; animation-duration: 8s;"></div>
+        <div class="snowflake" style="left: 90%; animation-duration: 6s;"></div>
+    </div>
+
+    <div class="container">
+        <h1>Gra - Zgadnij Liczbę</h1>
+        <div id="menu">
+            <button onclick="showDifficulty()">Wybierz poziom trudności</button>
+            <button onclick="showInstructions()">Instrukcja</button>
+        </div>
+        <div id="instructions" class="hidden">
+            <h2>Instrukcja:</h2>
+            <p>1. Program losuje liczbę w zależności od wybranego poziomu trudności (łatwy, średni, trudny).</p>
+            <p>2. Twoim zadaniem jest odgadnąć liczbę, wpisując ją w pole i klikając "Sprawdź".</p>
+            <p>3. Gra będzie podpowiadać: LODOWATO, ZIMNO, CIEPŁO, CIEPŁO, aż odgadniesz liczbę.</p>
+            <button class="back-button" onclick="backToMenu()">Powrót do menu</button>
+        </div>
+        <div id="difficulty" class="hidden">
+            <h2>Wybierz poziom trudności</h2>
+            <button onclick="startGame(50)">Łatwy (1-50)</button>
+            <button onclick="startGame(100)">Średni (1-100)</button>
+            <button onclick="startGame(200)">Trudny (1-200)</button>
+            <button class="back-button" onclick="backToMenu()">Powrót do menu</button>
+        </div>
+        <div id="game" class="hidden">
+            <h2>Odgadnij liczbę!</h2>
+            <input type="number" id="guess" placeholder="Twoja liczba" />
+            <button onclick="checkGuess()">Sprawdź</button>
+            <p class="result" id="feedback"></p>
+            <p id="attempts">Liczba prób: 0</p>
+            <button class="back-button" onclick="backToMenu()">Powrót do menu</button>
+            <button class="back-button" onclick="restartGame()">Spróbuj ponownie</button>
+        </div>
+    </div>
+
+    <script>
+        let secretNumber;
+        let attempts = 0;
+        let maxNumber;
+
+        function showDifficulty() {
+            document.getElementById('menu').classList.add('hidden');
+            document.getElementById('difficulty').classList.remove('hidden');
+        }
+
+        function startGame(difficultyLevel) {
+            maxNumber = difficultyLevel;
+            secretNumber = Math.floor(Math.random() * maxNumber) + 1;
+            attempts = 0;
+            document.getElementById('difficulty').classList.add('hidden');
+            document.getElementById('game').classList.remove('hidden');
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('attempts').textContent = `Liczba prób: ${attempts}`;
+        }
+
+        function backToMenu() {
+            document.getElementById('difficulty').classList.add('hidden');
+            document.getElementById('game').classList.add('hidden');
+            document.getElementById('instructions').classList.add('hidden');
+            document.getElementById('menu').classList.remove('hidden');
+        }
+
+        function showInstructions() {
+            document.getElementById('menu').classList.add('hidden');
+            document.getElementById('instructions').classList.remove('hidden');
+        }
+
+        function restartGame() {
+            startGame(maxNumber);
+        }
+
+        function checkGuess() {
+            const guess = parseInt(document.getElementById('guess').value);
+            attempts++;
+            const difference = Math.abs(secretNumber - guess);
+            let feedback;
+
+            document.getElementById('attempts').textContent = `Liczba prób: ${attempts}`;
+
+            if (guess === secretNumber) {
+                feedback = `Gratulacje! Odgadłeś liczbę w ${attempts} próbach! <span>🎄</span>`;
+            } else if (difference >= 75) {
+                feedback = '<span style="color: #b0c4de;">LODOWATO!</span>';
+            } else if (difference >= 50) {
+                feedback = '<span style="color: #1e90ff;">ZIMNO!</span>';
+            } else if (difference >= 25) {
+                feedback = '<span style="color: #f0e68c;">CHŁODNO!</span>';
+            } else if (difference >= 10) {
+                feedback = '<span style="color: #ff6347;">CIEPŁO!</span>';
+            } else {
+                feedback = '<span style="color: #ff4500;">GORĄCO!</span>';
+            }
+
+            if (guess !== secretNumber) {
+                feedback += guess > secretNumber ? ' Za dużo!' : ' Za mało!';
+            }
+
+            document.getElementById('feedback').innerHTML = feedback;
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
